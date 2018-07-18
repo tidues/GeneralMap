@@ -183,6 +183,8 @@ if __name__ == '__main__':
     sRange1 = range(10)
     sStr1 = '123'
 
+    sMixed1 = [[(1, 2, 4), (4, 5)], [(6, 7, 8), '91011']]
+
     # double level test instances
     sList2 = [[1, 2], [3, 4], [5, 6, 7]]
     sTuple2 = ((1, 2), (3, 4), (5, 6, 7))
@@ -190,11 +192,14 @@ if __name__ == '__main__':
     sSlice2 = [slice(None, 10 ,2), slice(1, 3, None), slice(2, None, None)]
     sRange2 = (range(3), range(1, 5), range(2, 10, 3))
     sStr2 = ['12', '34', '567']
-    
+    sMixed = [(1, 2), [3, 4, 5], {6: 6, 7: 7}, range(3), slice(None, 10, 2)]
+
     # two functions
     fun1 = lambda x: x+1
     fun2 = lambda x: str(int(x)+1)
     fun3 = lambda x: x+2
+    fun4 = lambda x: x[0]
+
     # gmap objects
     mp1 = GMap()
     mp2 = GMap(intoStr=True)
@@ -217,6 +222,10 @@ if __name__ == '__main__':
     print(mp1.gMap(fun1, sSlice2))
     print(mp1.gMap(fun1, sRange2))
     print(mp2.gMap(fun2, sStr2))
+    
+    print(mp1.gMap(fun1, sMixed))
+
+    print(mp5.gMap(fun4, sMixed1))
 
     # test depth specified map
     print(mp3.gMap(fun1, sList1))
