@@ -119,9 +119,9 @@ Notice, if register a new basic type that is already in the structure types, it 
 
 The method `mp.regStructType(cls, clsRule)` can register a new structure type, where `cls` is a class and `clsRule` is a rule description function. Same as before, registering an existing basic type to structure type will remove it from the baic type list. 
 
-With new structure type defined, it can be mixed with other structure types to build complicated data structure. And use can use gMap on these objects the way same as before.
+With new structure type defined, it can be mixed with other structure types to build complicated data structure. And gMap can be used on these objects the way same as before.
 
-An example:
+Below is a new data type called MSet (multiset).
 ```python
 # a self defined container (multiset)
 class MSet:
@@ -139,10 +139,13 @@ class MSet:
 
     def toList(self):
         return self.elems
+```
 
+then we need to define a map rule function for this class
 
+```python
 # define the function that describe the map rule
-# explain in the next section
+# each term will be explained in the next section
 def msetMapRule(mset):
     isBottom = False
     const = MSet
@@ -152,12 +155,15 @@ def msetMapRule(mset):
     projFunc = lambda x: x
     liftFunc = lambda x, res: res
     return (isBottom, const, paramList, paramMapIdx, ifExpand, projFunc, liftFunc)
+```
 
+with both class and rules are defined, we can apply gMap as same as before:
+
+```python
 mp = gMap()  # create gMap object
 mp.regStructType(MSet, msetMapRule) # register new structure type with rule
 
-
-# define functions and data as before
+# define functions and data
 # a two level MSet
 mset0 = MSet([1,2])
 mset1 = MSet([3,4])
