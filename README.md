@@ -186,3 +186,40 @@ the output is
 MSet[MSet[2, 3], MSet[4, 5]]
 (MSet[2, 3], MSet[4, 5])
 ```
+
+## The map rule function
+Now suppose we are defining a map rule function `mcMapRule` for the class `MyCls`, then `mcMapRule(myObj)` is a function accepting objects of `MyCls` and ouput a tuple of rules. Each term in the rules are defined as:
+
+1. `isBottom`: a function from the input object `myObj` to bool, to sift extra bottom cases that is input dependent, such as length 1 string is a bottom case for string structure. In most cases, `isBottom = False`.
+
+1. `const`: a construct function that given a list of parameters can construct an object of `MyCls`, not necessary to be the constructor of the class.
+
+1. `paramList`: the list of parameters that used as input for the construct function `const` to produce the input object `myObj`.
+
+1. `paramMapIdx`: the indexes list of elements in `paramList` that needs to be apply by `f`. In most cases, all parameters needs to be applied by `f`, then `paramMapIdx = range(len(paramList))`.
+
+1. `ifExpand`: means when we apply `const` onto the `paramList`, do we need to expand the list or not. If `const(a,b,c)`, then `ifExpand=True`, if `const([a, b, c])`, then `ifExpand=False`.
+
+1. `projFunc`: define a function that transform the input `myObj` to the next level. **In most cases, there is nothing to transform, so `projFunc = lambda x: x`**. In the dictionary case, we only map `f` on the value instead of the key, so we need to extract the second value to pass to `f`, hence `projFunc = lambda x: x[1]` (in my implementation, the parameter list for dictionary is a list of length 2 tuples, so `x[1]` is extracting the value).
+
+1. `liftFunc`: the reverse process of `projFunc`. After applying `f` on the transformed value we get `res`, then how to merge `res` with current input object `myObj`. **In most cases, there is nothing to merge, so `liftFunc = lambda x, res: res`**. In the dictionary case, we need to combine with key into a tuple, so `liftFunc = lambda x, res: (x[0], res)`.
+
+An rule of thumb is, if we apply `f` to all the parameters for the construct function, like `list, tuple` or the example `MSet` above, then we always set
+```python
+isBottom = False
+paraMapIdx = range(len(paramList))
+projFunc = lambda x: x
+liftFunc = lambda x, res: res
+```
+so the only things to specify are the construct function, the construct list of parameters and whether or not expand the list when we apply construct function on the parameter list.
+
+All the rules for the predefined structure types can be found in the source file.
+
+# How to Install
+Use pip
+```python
+pip install generalmap
+```
+
+# Future Plan
+Add more predefined basic and strcutre types.
