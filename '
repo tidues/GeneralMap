@@ -83,6 +83,7 @@ class GMap:
             ruleFun = self.structTypes[mytype]
         else:
             errStr = str(struct) + ' is not a supported type, please register this type along with a map rule function.'
+
             raise TypeError(errStr)
 
         isBottom, const, paramList, paramMapIdx, ifExpand, projFunc, liftFunc  = ruleFun(struct)

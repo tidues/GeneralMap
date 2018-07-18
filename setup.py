@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="generalmap",
-    version="1.0.1",
+    version="1.0.2",
     author="Tidues Wei",
     author_email="tidues@gmail.com",
     description="A generalized map function for lift function over structures",
