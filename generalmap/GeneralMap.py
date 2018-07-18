@@ -173,7 +173,6 @@ class GMap:
         liftFunc = lambda x, res: res
         return (isBottom, const, paramList, paramMapIdx, ifExpand, projFunc, liftFunc)
 
-'''
 # testing code
 if __name__ == '__main__':
     # single level test instances
@@ -292,4 +291,3 @@ if __name__ == '__main__':
     
     print(mp7.gMap(fun1, mset))
     print(mp7.gMap(fun1, mtuple))
-'''
