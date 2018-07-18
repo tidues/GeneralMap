@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: generalmap
-Version: 1.0.0
+Version: 1.0.1
 Summary: A generalized map function for lift function over structures
-Home-page: https://github.com/tidues/GeneralMap
+Home-page: https://github.com/tidues/GeneralizedMapFunction
 Author: Tidues Wei
 Author-email: tidues@gmail.com
 License: UNKNOWN
