@@ -1,0 +1,8 @@
+README.md
+setup.py
+generalmap/GeneralMap.py
+generalmap/__init__.py
+generalmap.egg-info/PKG-INFO
+generalmap.egg-info/SOURCES.txt
+generalmap.egg-info/dependency_links.txt
+generalmap.egg-info/top_level.txt

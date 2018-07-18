@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: generalmap
+Version: 1.0.0
+Summary: A generalized map function for lift function over structures
+Home-page: https://github.com/tidues/GeneralMap
+Author: Tidues Wei
+Author-email: tidues@gmail.com
+License: UNKNOWN
+Description: # GeneralMap
+        An generalized version of map function in python, can lift basic function over various data structures.
+        
+Platform: UNKNOWN
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
