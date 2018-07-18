@@ -14,7 +14,7 @@ and these are what generalmap package can do.
 Some examples below like applying function to nonhomogeneous data structure are **not good coding styles**, they are simply used to demonstrate what this pacakge can do.
 
 ## Lift function automatically
-This is the default behavior, the gMap function will cross all predefined structures then apply `f` to the atom data types like `int, float, string` (defaultly) or `int, float` (if set `intoStr=True`). One caveat is that `f` will always apply to the same level of structure.
+This is the default behavior, the gMap function will cross all predefined structures then apply `f` to the **basic types** like `int, float, string` (defaultly) or `int, float` (if set `intoStr=True`). One caveat is that `f` will always apply to the same level of structure.
 
 An one level example:
 ```python
@@ -75,7 +75,7 @@ with output:
 ```
 
 ## Lift function by specifying depth
-With depth specified, gMap will apply `f` to the desinged level without caring about the input type, with depth 1 as one level structure (behavior of map function in python).
+With depth specified, gMap will apply `f` to the desinged level without caring whether the type is basic or not. Depth 1 as one level structure (behavior of map function in python).
 
 A example:
 ```python
@@ -107,19 +107,19 @@ if with `intoStr` set as `True`, then `string` is a structure type instead of ba
 # Advanced Usage: Apply to User Defined Objects
 **This section is not necessary if the basic usage is enough for you!!**
 
-There are two more things user can do with this package:
+There are two more things user can achieve with this package:
 1. Register new basic types.
 1. Register new structure types 
 
 ## Register new basic types
 
-This can be accompalished by the method `mp.regBasicType(cls)` where `cls` is the class. For instance, suppose there is a new data type `double` defined, and we want it to be a bottom type, so that when we apply gMap automatically, it'll stop and apply `f` on the data of this type. 
+This can be accomplished by the method `mp.regBasicType(cls)` where `cls` is the class. For instance, suppose there is a new data type `double` defined, and we want it to be a bottom type, so that when we apply gMap automatically, it'll stop and apply `f` on the data of this type. 
 
 Notice, if register a new basic type that is already in the structure types, it will be **removed from** the structure type.
 
 ## Register new structure types
 
-The method `mp.regStructType(cls, clsRule)` can register a new structure type, where `cls` is a class and `clsRule` is a rule description function. Same as before, registering an existing basic type to structure type will remove it from the baic type list. 
+The method `mp.regStructType(cls, clsRule)` can register a new structure type, where `cls` is a class and `clsRule` is a rule description function. Same as before, registering an existing basic type to structure type will remove it from the basic type list. 
 
 With new structure type defined, it can be mixed with other structure types to build complicated data structure. And gMap can be used on these objects the way same as before.
 
@@ -196,7 +196,7 @@ Now suppose we are defining a map rule function `mcMapRule` for the class `MyCls
 
 1. `paramList`: the list of parameters that used as input for the construct function `const` to produce the input object `myObj`.
 
-1. `paramMapIdx`: the indexes list of elements in `paramList` that needs to be apply by `f`. In most cases, all parameters needs to be applied by `f`, then `paramMapIdx = range(len(paramList))`.
+1. `paramMapIdx`: the list of indexes of elements in `paramList` that needs to be apply by `f`. In most cases, all parameters needs to be applied by `f`, then `paramMapIdx = range(len(paramList))`.
 
 1. `ifExpand`: means when we apply `const` onto the `paramList`, do we need to expand the list or not. If `const(a,b,c)`, then `ifExpand=True`, if `const([a, b, c])`, then `ifExpand=False`.
 
@@ -204,16 +204,15 @@ Now suppose we are defining a map rule function `mcMapRule` for the class `MyCls
 
 1. `liftFunc`: the reverse process of `projFunc`. After applying `f` on the transformed value we get `res`, then how to merge `res` with current input object `myObj`. **In most cases, there is nothing to merge, so `liftFunc = lambda x, res: res`**. In the dictionary case, we need to combine with key into a tuple, so `liftFunc = lambda x, res: (x[0], res)`.
 
-An rule of thumb is, if we apply `f` to all the parameters for the construct function, like `list, tuple` or the example `MSet` above, then we always set
+An rule of thumb is, if we apply `f` to all the parameters of the construct function, like `list, tuple` or the example `MSet` above, then we always set
 ```python
-isBottom = False
 paraMapIdx = range(len(paramList))
 projFunc = lambda x: x
 liftFunc = lambda x, res: res
 ```
-so the only things to specify are the construct function, the construct list of parameters and whether or not expand the list when we apply construct function on the parameter list.
+And in most cases `isBottom = False`, so the only things to specify are the construct function, the construct list of parameters and whether or not expand the list when we apply construct function on the parameter list.
 
-All the rules for the predefined structure types can be found in the source file.
+All the rules for the predefined structure types can be found in the source file, can be used as examples for designing rules.
 
 # How to Install
 Use pip
