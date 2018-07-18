@@ -105,6 +105,8 @@ the structure types including:
 if with `intoStr` set as `True`, then `string` is a structure type instead of basic.
 
 # Advanced Usage: Apply to User Defined Objects
+**This section is not necessary if the basic usage is enough for you!!**
+
 There are two more things user can do with this package:
 1. Register new basic types.
 1. Register new structure types 
@@ -141,7 +143,7 @@ class MSet:
         return self.elems
 ```
 
-then we need to define a map rule function for this class
+then we need to define a map rule function for this class, all the rules will be explained in the next section.
 
 ```python
 # define the function that describe the map rule
