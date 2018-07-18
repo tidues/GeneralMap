@@ -1,11 +1,11 @@
 # What is Generalized Map Function (generalmap)
-This is a generalized map function in python, which can lift basic function over various data structures and user defined objects. It implements the idea borrowed from functional programming language, that is to define a simple function first to tackle a small piece of problem, then reuse this function to apply to complicated data structures. This process is called lifting.
+This is a generalized map function in python, which can lift basic function over various data structures and user defined objects. It implements the idea borrowed from functional programming language, that is to define a simple function first to tackle a small piece of problem, then reuse this function to apply to complicated data structures (sometimes called function lifting).
 
 An simple example, given `lst=[1, 2, 3]` and function `f = lambda x: x+1`, this functin only focuses on solving the problem for one element in the list, but `map(f, lst)` will apply `f` to a list, which is a more complicated structure. In a nutshell, the map function let you focus on the atom part or essential part of the problem, then reuse the function in a very smart and cheap way.
 
 However, the default map function provided by python is very restrictive:
 * it can only apply to iteratable
-* it can only cross one level of the structure
+* it can cross only **one level** of the structure
 * it is not easy to apply to user defined objects
 
 and these are what generalmap package can do.
@@ -56,7 +56,7 @@ with output as:
 ```python
 [(2, 3), [4, 5, 6], {6: 7, 7: 8}, range(1, 4), slice(1, 11, 2)]
 ```
-notice different structures have their own unique lifting behavior predefined.
+notice different structures have their own unique lifting behaviors predefined.
 
 
 In defualt, the gMap will not crossing string to apply function on each character, but this can be changed:
@@ -69,7 +69,7 @@ mp = GMap(intoStr=True)  # change default behavior
 
 print(mp.gMap(foo, sStr1))
 ```
-witha output:
+with output:
 ```python
 234
 ```
@@ -108,3 +108,73 @@ if with `intoStr` set as `True`, then `string` is a structure type instead of ba
 There are two more things user can do with this package:
 1. Register new basic types.
 1. Register new structure types 
+
+## Register new basic types
+
+This can be accompalished by the method `mp.regBasicType(cls)` where `cls` is the class. For instance, suppose there is a new data type `double` defined, and we want it to be a bottom type, so that when we apply gMap automatically, it'll stop and apply `f` on the data of this type. 
+
+Notice, if register a new basic type that is already in the structure types, it will be **removed from** the structure type.
+
+## Register new structure types
+
+The method `mp.regStructType(cls, clsRule)` can register a new structure type, where `cls` is a class and `clsRule` is a rule description function. Same as before, registering an existing basic type to structure type will remove it from the baic type list. 
+
+With new structure type defined, it can be mixed with other structure types to build complicated data structure. And use can use gMap on these objects the way same as before.
+
+An example:
+```python
+# a self defined container (multiset)
+class MSet:
+    def __init__(self, lst):
+        self.elems = lst
+
+    def __repr__(self):
+        return('MSet' + str(self.elems) + '')
+
+    def __getitem__(self, idx):
+        if type(idx) is int:
+            return self.elems[idx]
+        else:
+            return MSet(self.elems[idx])
+
+    def toList(self):
+        return self.elems
+
+
+# define the function that describe the map rule
+# explain in the next section
+def msetMapRule(mset):
+    isBottom = False
+    const = MSet
+    paramList = mset.toList()
+    paramMapIdx = range(len(paramList))
+    ifExpand = False
+    projFunc = lambda x: x
+    liftFunc = lambda x, res: res
+    return (isBottom, const, paramList, paramMapIdx, ifExpand, projFunc, liftFunc)
+
+mp = gMap()  # create gMap object
+mp.regStructType(MSet, msetMapRule) # register new structure type with rule
+
+
+# define functions and data as before
+# a two level MSet
+mset0 = MSet([1,2])
+mset1 = MSet([3,4])
+mset = MSet([mset0, mset1])
+
+# a tuple of MSets
+mtuple = (MSet([1,2]), MSet([3,4]))
+
+# function to apply
+foo = lambda x: x+1
+
+# apply and show results
+print(mp.gMap(foo, mset))
+print(mp.gMap(foo, mtuple))
+```
+the output is
+```python
+MSet[MSet[2, 3], MSet[4, 5]]
+(MSet[2, 3], MSet[4, 5])
+```
